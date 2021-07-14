@@ -37,35 +37,37 @@ import { DumplingComponent } from './shop/dumpling/dumpling.component';
 import { LocationComponent } from './location/location.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { ShopComponent } from './shop/shop.component';
+import { A11yModule } from '@angular/cdk/a11y';
 
 // TODO: #9. Add the power of @angular/cdk/a11y
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    NavigationComponent,
-    ShopComponent,
-    AboutComponent,
-    LocationComponent,
-    DumplingComponent,
-    ColorPickerComponent,
-    ColorPickerDialogComponent,
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    BrowserAnimationsModule,
-    MatButtonModule,
-    MatCardModule,
-    MatDialogModule,
-    MatIconModule,
-    MatListModule,
-    MatSliderModule,
-    MatToolbarModule,
-    GoogleMapsModule,
-  ],
-  providers: [Title],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        NavigationComponent,
+        ShopComponent,
+        AboutComponent,
+        LocationComponent,
+        DumplingComponent,
+        ColorPickerComponent,
+        ColorPickerDialogComponent,
+    ],
+    imports: [
+        A11yModule,
+        BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        BrowserAnimationsModule,
+        MatButtonModule,
+        MatCardModule,
+        MatDialogModule,
+        MatIconModule,
+        MatListModule,
+        MatSliderModule,
+        MatToolbarModule,
+        GoogleMapsModule,
+    ],
+    providers: [Title],
+    bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

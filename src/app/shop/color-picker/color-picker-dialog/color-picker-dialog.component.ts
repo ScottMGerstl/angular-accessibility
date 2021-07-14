@@ -13,51 +13,56 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 export interface ColorDialogData {
-  color: string;
+    color: string;
 }
 
 @Component({
-  selector: 'app-color-picker-dialog',
-  templateUrl: './color-picker-dialog.component.html',
-  styleUrls: ['./color-picker-dialog.component.scss']
+    selector: 'app-color-picker-dialog',
+    templateUrl: './color-picker-dialog.component.html',
+    styleUrls: ['./color-picker-dialog.component.scss'],
 })
 export class ColorPickerDialogComponent implements OnInit {
-  @Output() recolor = new EventEmitter();
-  color = '#fff';
+    @Output() recolor = new EventEmitter();
+    color = '#fff';
 
-  public defaultColors: string[] = [
-    'white',
-    'tomato',
-    'hotpink',
-    'coral',
-    'gold',
-    'greenyellow',
-    'lightgreen',
-    'turquoise',
-    'skyblue',
-    'royalblue',
-    'plum',
-  ];
-
-  // TODO: #11. Announce changes with LiveAnnouncer
-  constructor(public dialogRef: MatDialogRef<ColorPickerDialogComponent>) { }
-
-  ngOnInit(): void { }
-
-  public changeColor(color: string): void {
-    if (color) {
-      this.recolor.emit(color);
-    }
+    public defaultColors: string[] = [
+        'white',
+        'tomato',
+        'hotpink',
+        'coral',
+        'gold',
+        'greenyellow',
+        'lightgreen',
+        'turquoise',
+        'skyblue',
+        'royalblue',
+        'plum',
+    ];
 
     // TODO: #11. Announce changes with LiveAnnouncer
-    this.dialogRef.close();
-  }
+    constructor(
+        public dialogRef: MatDialogRef<ColorPickerDialogComponent>,
+        @Inject(MAT_DIALOG_DATA) public data: ColorDialogData,
+        private readonly liveAnnouncer: LiveAnnouncer
+    ) {}
 
-  public closeDialog(): void {
-    this.dialogRef.close();
-  }
+    ngOnInit(): void {}
+
+    public changeColor(color: string): void {
+        if (color) {
+            this.recolor.emit(color);
+        }
+        // TODO: #11. Announce changes with LiveAnnouncer
+        this.liveAnnouncer.announce(`Selected color: ${color}`);
+        this.dialogRef.close();
+    }
+
+    public closeDialog(): void {
+        this.dialogRef.close();
+    }
 }

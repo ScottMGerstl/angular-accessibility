@@ -14,21 +14,50 @@
  * limitations under the License.
  */
 import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { filter, map } from 'rxjs/operators';
 
 // TODO: #4. Define unique page titles - add imports
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  title = 'a11y in Angular';
-  isDark: boolean | undefined;
-  bodyStyles: CSSStyleDeclaration | undefined;
+    title = 'a11y in Angular';
+    isDark: boolean | undefined;
+    bodyStyles: CSSStyleDeclaration | undefined;
 
-  // TODO: #4. Define unique page titles - add the TitleService and Router.
-  constructor() {}
+    // TODO: #4. Define unique page titles - add the TitleService and Router.
+    constructor(
+        private readonly titleService: Title,
+        private readonly router: Router,
+        private readonly activatedRoute: ActivatedRoute
+    ) {}
 
-  ngOnInit(): void {}
+    ngOnInit() {
+        const appTitle = this.titleService.getTitle();
+
+    this.router.events
+        .pipe(
+            filter((ev) => ev instanceof NavigationEnd),
+            map(() => {
+                const child = this.activatedRoute.firstChild;
+
+                if (child?.snapshot.data.title) {
+                    return child.snapshot.data.title;
+                } else {
+                    return appTitle;
+                }
+            })
+        )
+        .subscribe((title) => {
+            const uniqueTitleParts = new Set<string>([title, appTitle]);
+            this.titleService.setTitle(
+                Array.from(uniqueTitleParts).join(' | ')
+            );
+        });
+    }
 }
